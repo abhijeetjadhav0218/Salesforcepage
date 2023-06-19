@@ -1,0 +1,138 @@
+package Sample;
+
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class Salesforce {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+	
+		Map<String, Object> prefs = new HashMap<String, Object>();
+		prefs.put("profile.default_content_setting_values.notifications", 2);
+		ChromeOptions options = new ChromeOptions();
+		options.setExperimentalOption("prefs", prefs);
+		
+		System.setProperty("Webdriver.chrome.driver", "E:\\Selenium\\WebDriver\\Chrome\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver(options);
+		
+		Actions act = new Actions(driver);
+		driver.get("https://login.salesforce.com/");
+		driver.manage().window().maximize();
+		
+		//Username and password
+		WebElement Username = driver.findElement(By.xpath("//input[@id='username']"));
+		Username.sendKeys("aj18feb1996@gmail.com");
+		WebElement Password = driver.findElement(By.xpath("//input[@type =\"password\"]"));
+		Password.sendKeys("oneplus@2019");
+		//login button
+		WebElement loginbutton = driver.findElement(By.xpath("//*[@type=\"submit\"]"));
+		loginbutton.click();
+		
+		//Applaucher
+		//driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+		
+		//WebElement Applauncher1 = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'your-element-selector')));
+		//WebElement Applauncher = driver.findElement(By.xpath("//*[@id=\"458:83;a\"]"));
+		//Applauncher.click();
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+        WebElement appLauncherButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='slds-button slds-icon-waffle_container slds-context-bar__button slds-button forceHeaderButton salesforceIdentityAppLauncherHeader']")));
+        appLauncherButton.click();
+		
+		
+		//searching sales app
+		//WebElement searchapp = driver.findElement(By.xpath("//input[@id='input-203']"));
+		//searchapp.sendKeys("Sales");
+        
+        WebElement searchInput = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='slds-input']")));
+        searchInput.sendKeys("Sales");
+        
+        WebElement salesAppLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@id='07p2w000000NQg0AAG']//b[contains(text(),'Sales')]")));
+        salesAppLink.click();
+        
+        //checking all layout tabs opening correctly 
+        
+        //WebElement Hometab = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@id='07p2w000000NQg0AAG']//b[contains(text(),'Sales')]")));
+        //Hometab.click();
+       // 
+       // WebElement Lead = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='slds-truncate'][normalize-space()='Leads']")));
+        //Lead.click();
+       // 
+       // WebElement task = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[normalize-space()='Tasks']")));
+       // Lead.click();
+        
+        //WebElement oppt = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[normalize-space()='Opportunities']")));
+        //oppt.click(); 
+        
+         WebElement personlizebar = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[normalize-space()='Home']")));
+       personlizebar.click();
+        
+        
+        WebElement Addnewitem = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@class='slds-button slds-button_neutral button']")));
+        Addnewitem.click();
+        WebElement allbutton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[normalize-space()='All']")));
+      
+        act.doubleClick(allbutton).perform();
+        allbutton.click();
+        //doubleclick
+        driver.quit();
+        
+        WebElement searchbutton  = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='1417:0']")));
+        searchbutton.sendKeys("Contracts");
+        Select select = new Select(driver.findElement(By.xpath("//input[@id='1417:0']")));
+        List<WebElement> lst = select.getOptions();
+        for(WebElement option: lst) {
+        	select.selectByIndex(4);
+        	select.selectByIndex(5);
+        }
+        ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,800);");
+       
+        
+        /*((JavascriptExecutor) driver).executeScript("window.open();");
+        Set<String> windowHandles = driver.getWindowHandles();
+        String currentWindowHandle = driver.getWindowHandle();
+        String newWindowHandle = "";
+        for (String windowHandle : windowHandles) {
+            if (!windowHandle.equals(currentWindowHandle)) {
+                newWindowHandle = windowHandle;
+                break;
+            }
+        }*/
+        //driver.switchTo().window(newWindowHandle);
+        
+        WebElement Learnmorelink = driver.findElement(By.xpath("//a[@title='Learn More']"));
+        Learnmorelink.click();
+        
+        
+        
+        String currentURL = "https://digicloudsolutionpvtltd2-dev-ed.develop.my.salesforce.com/HelpAndTrainingDoor?version=2&resource=https%3A%2F%2Fhelp.salesforce.com%2FarticleView%3Fid%3Duser_userdisplay_tabs_lex.htm";
+        String LearnmoreURL = driver.getCurrentUrl();
+        //checking new page oping in new and and URL is correct 
+        if(LearnmoreURL ==currentURL) {
+         System.out.println("Correct URL ");
+        }
+        else {
+        	System.out.println("URL is Missmatch");
+        }
+	}
+	
+	
+
+}
